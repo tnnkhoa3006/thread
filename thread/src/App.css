@@ -1,10 +1,20 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: black;
+  overflow-x: hidden;
+  scrollbar-color: black transparent;
 }
-
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* Ẩn scrollbar cho Firefox */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
 .logo {
   height: 6em;
   padding: 1.5em;

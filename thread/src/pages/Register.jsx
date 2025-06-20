@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import Thumbnail from '../assets/thumbnails.png'
-import Instagramlogo from '../assets/Instagramlogo.png'
+import Instagramlogo from '../assets/instagramlogo.png'
 import FacebookIcon from '@mui/icons-material/Facebook';
 
 const Register = () => {

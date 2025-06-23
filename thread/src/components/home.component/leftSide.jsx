@@ -12,6 +12,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import MenuIcon from '@mui/icons-material/Menu';
 import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
 import GestureIcon from '@mui/icons-material/Gesture';
+import toast from 'react-hot-toast';
 
 const LeftSide = () => {
   const navigate = useNavigate()

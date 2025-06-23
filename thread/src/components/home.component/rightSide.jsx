@@ -1,6 +1,23 @@
-import React from 'react'
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const RightSide = () => {
+  const navigate = useNavigate();
+  const logoutHandler = async () => {
+    try {
+      const res = await axios.get('/user/logout', {withCredentials: true});
+      if (res.data.success) {
+        navigate('/login');
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  }
+
   return (
     <div className="w-[370px]">
       <div className="w-6/7 pl-[54px] pt-[30px]">
@@ -43,6 +60,12 @@ const RightSide = () => {
               </div>
             </div>
           ))}
+        </div>
+        <div className="w-full pl-[15px] pt-[20px]">
+          <div onClick={() => logoutHandler()} className="w-[220px] h-[50px] flex items-center space-x-2 hover:cursor-pointer hover:bg-zinc-800 rounded-md px-4">
+            <ExitToAppIcon style={{ fontSize: 30 }} />
+            <div className="text-[16px] font-medium">Logout</div>
+          </div>
         </div>
       </div>
     </div>

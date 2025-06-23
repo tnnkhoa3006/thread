@@ -3,9 +3,50 @@ import { useNavigate } from 'react-router-dom';
 import Thumbnail from '../assets/thumbnails.png'
 import Instagramlogo from '../assets/instagramlogo.png'
 import FacebookIcon from '@mui/icons-material/Facebook';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useState } from 'react';
 
 const Register = () => {
   const navigate = useNavigate()
+  const [inputText, setInputText] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleInput = (e) => {
+    setInputText({ ...inputText, [e.target.name]: e.target.value });
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const res = await axios.post('/user/register', inputText,{
+        header : {
+          "Content-Type": "application/json"
+        },
+        withCredentials: true
+      });
+
+      if (res.data.success) {
+        toast.success(res.data.message);
+        setInputText({ username: '', email: '', password: '' });
+        navigate('/login');
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    } finally{
+      setLoading(false);
+    }
+  }
+
+
   return (
     <section className="w-screen h-screen">
       <div className="w-full h-full flex">
@@ -25,7 +66,7 @@ const Register = () => {
               </div>
               <div className="w-full flex justify-center items-center">
                 <div className="w-full flex flex-col justify-center items-center space-y-[20px]">
-                  <form className='w-full' action="">
+                  <form onSubmit={handleSignup} className='w-full' action="">
                     <div className="w-full flex justify-center items-center pb-[20px]">
                       <h4 className="w-3/4 text-zinc-300 text-center text-[16px]">Sign up to see photos and videos from your friends.</h4>
                     </div>
@@ -46,28 +87,30 @@ const Register = () => {
                       <input 
                         className="text-xs w-3/4 h-[35px] text-white outline-none resize-none bg-zinc-900 rounded-sm border-[1px] border-gray-500 px-3" 
                         type="text" 
-                        placeholder="Phone number or email" 
+                        placeholder="Username"
+                        name= 'username'
+                        value={inputText.username}
+                        onChange={handleInput}
+                      />
+                    </div>
+                    <div className="w-full flex justify-center items-center pb-[10px]">
+                      <input 
+                        className="text-xs w-3/4 h-[35px] text-white outline-none resize-none bg-zinc-900 rounded-sm border-[1px] border-gray-500 px-3" 
+                        type="email" 
+                        placeholder="Phone number or email"
+                        name= 'email'
+                        value={inputText.email}
+                        onChange={handleInput}
                       />
                     </div>
                     <div className="w-full flex justify-center items-center pb-[10px]">
                       <input 
                         className="text-xs w-3/4 h-[35px] text-white outline-none resize-none bg-zinc-900 rounded-sm border-[1px] border-gray-500 px-3" 
                         type="password" 
-                        placeholder="Password" 
-                      />
-                    </div>
-                    <div className="w-full flex justify-center items-center pb-[10px]">
-                      <input 
-                        className="text-xs w-3/4 h-[35px] text-white outline-none resize-none bg-zinc-900 rounded-sm border-[1px] border-gray-500 px-3" 
-                        type="text" 
-                        placeholder="Fullname" 
-                      />
-                    </div>
-                    <div className="w-full flex justify-center items-center">
-                      <input 
-                        className="text-xs w-3/4 h-[35px] text-white outline-none resize-none bg-zinc-900 rounded-sm border-[1px] border-gray-500 px-3" 
-                        type="text" 
-                        placeholder="Username" 
+                        placeholder="Password"
+                        name= 'password'
+                        value={inputText.password}
+                        onChange={handleInput}
                       />
                     </div>
                     <div className="w-full flex flex-col justify-center items-center pt-[10px] space-y-[10px]">
@@ -85,7 +128,10 @@ const Register = () => {
                       </span>
                     </div>             
                     <div className="w-full flex justify-center items-center pt-[15px]">
-                      <button className="w-3/4 h-[30px] text-gray-300 bg-blue-700 rounded-lg border-[1px] border-gray-500">Sign up</button>
+                      <button 
+                        type="submit" 
+                        className="w-3/4 h-[30px] text-gray-300 bg-blue-700 rounded-lg border-[1px] border-gray-500"
+                      >Sign up</button>
                     </div>
                   </form>
                 </div>

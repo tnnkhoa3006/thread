@@ -26,7 +26,7 @@ export const addNewPost = async (req, res) => {
         const cloudResponse = await cloudinary.uploader.upload(fileUrl);
         const post = await Post.create({
             caption,
-            iamge: cloudResponse.secure_url,
+            image: cloudResponse.secure_url,
             author: authorId
         });
 
@@ -36,7 +36,7 @@ export const addNewPost = async (req, res) => {
             await user.save();
         }
 
-        await post.populate({path: 'author', select: '-passwword'});
+        await post.populate({path: 'author', select: '-password'});
 
         return res.status(200).json({
             message: "Post created successfully",
@@ -48,16 +48,15 @@ export const addNewPost = async (req, res) => {
     }
 }
 
-export const getAllPosts = (req, res) => {
+export const getAllPosts = async (req, res) => {
     try {
-        const posts = Post.find().sort({createdAt: -1})
+        const posts = await Post.find().sort({createdAt: -1})
         .populate({path: 'author', select: '-password'})
         .populate({
-            path: 'comments.author',
-            sort: {createdAt: -1}, 
+            path: 'comments',
             populate: {
-                path: 'author', 
-                select: 'username, ProfilePicture'
+                path: 'author',
+                select: 'username ProfilePicture'
             }
         });
         return res.status(200).json({
@@ -75,11 +74,10 @@ export const getUserPost = async (req, res) => {
         const posts = await Post.find({author: authorId}).sort({createdAt: -1})
         .populate({path: 'author', select: '-password'})
         .populate({
-            path: 'comments.author',
-            sort: {createdAt: -1}, 
+            path: 'comments',
             populate: {
                 path: 'author',
-                select: 'username, ProfilePicture'
+                select: 'username ProfilePicture'
             }
         });
         return res.status(200).json({
@@ -158,10 +156,9 @@ export const addComment = async (req, res) => {
             text,
             author: authorId,
             post: postId
-        }).populate({
-            path: 'author',
-            select: 'username, ProfilePicture'
-        });
+        })
+
+        await comment.populate({path: 'author', select: 'username ProfilePicture'});
 
         post.comments.push(comment._id);
         await post.save();
@@ -213,7 +210,7 @@ export const getCommentsOfPost = async (req, res) => {
         const postId = req.params.id;
         const comments = await Comment.find({post: postId}).sort({createdAt: -1}).populate({
             path: 'author',
-            select: 'username, ProfilePicture'
+            select: 'username ProfilePicture'
         });
         return res.status(200).json({
             comments,

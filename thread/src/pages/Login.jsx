@@ -6,6 +6,8 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setAuthUser } from '../redux/authSlice.js';
 
 const Login = () => {
   const navigate = useNavigate()
@@ -14,6 +16,7 @@ const Login = () => {
     password: ''
   })
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const handleInput = (e) => {
     setInputText({ ...imputText, [e.target.name]: e.target.value });
@@ -31,6 +34,7 @@ const Login = () => {
       });
 
       if (res.data.success) {
+        dispatch(setAuthUser(res.data.user));
         toast.success(res.data.message);
         setInputText({ email: '', password: '' });
         navigate('/');

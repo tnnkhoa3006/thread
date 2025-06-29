@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { use } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ProfileImage from '../../assets/hangnga.jpg'
+import { useState } from 'react'
 import Instagramlogo from '../../assets/instagramlogo.png'
 import HomeFilledIcon from '@mui/icons-material/HomeFilled';
 import SearchIcon from '@mui/icons-material/Search';
@@ -12,10 +12,14 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import MenuIcon from '@mui/icons-material/Menu';
 import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
 import GestureIcon from '@mui/icons-material/Gesture';
-import toast from 'react-hot-toast';
+import { useSelector } from 'react-redux';
+import Dialogaddpost from '../modals/dialogaddpost';
 
 const LeftSide = () => {
   const navigate = useNavigate()
+  const [showAddPost, setShowAddPost] = useState(false);
+  const {user} = useSelector(store => store.auth)
+
   return (
     <div className="flex h-screen fixed top-0 left-0 w-[245px] z-50 border-r border-zinc-700">
       <div className="w-[100px] relative">
@@ -52,12 +56,15 @@ const LeftSide = () => {
             <FavoriteBorderIcon style={{ fontSize: 30 }} />
             <div className="text-[16px] font-medium">Notifications</div>
           </div>
-          <div className="w-[220px] h-[50px] flex items-center space-x-2 hover:cursor-pointer hover:bg-zinc-800 rounded-md px-4">
+          <div 
+            className="w-[220px] h-[50px] flex items-center space-x-2 hover:cursor-pointer hover:bg-zinc-800 rounded-md px-4"
+            onClick={() => setShowAddPost(true)}
+          >
             <AddCircleOutlineIcon style={{ fontSize: 30 }} />
             <div className="text-[16px] font-medium">Create</div>
           </div>
           <div className="w-[220px] h-[50px] flex items-center space-x-2 hover:cursor-pointer hover:bg-zinc-800 rounded-md px-4">
-            <img className="w-[30px] h-[30px] rounded-full" src={ProfileImage} alt="progile image" />
+            <img className="w-[30px] h-[30px] rounded-full" src={user?.ProfilePicture} alt="progile image" />
             <div className="text-[16px] font-medium">Profile</div>
           </div>
 
@@ -78,6 +85,7 @@ const LeftSide = () => {
           </div>
         </div>
       </div>
+      <Dialogaddpost isopen={showAddPost} onClose={() => setShowAddPost(false)} />
     </div>
   )
 }

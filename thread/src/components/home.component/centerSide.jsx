@@ -1,31 +1,10 @@
 import { useRef } from 'react';
-import PostCard from '../post.component/postCard'; // Assuming PostCard is a separate component
+import PostCard from '../post.component/postCard.jsx'; 
+import { useSelector } from 'react-redux';
 
 const CenterSide = () => {
   const scrollRef = useRef(null)
-  const postData =
-  [
-    {
-      id: 1,
-      user: "Gigachad Man Mewing",
-      avatar: "https://i1.sndcdn.com/artworks-iNZ7PnppFNtWQrPl-6Uy9jw-t500x500.jpg",
-      image: "https://th.bing.com/th/id/OIP.BOvewLhwVkCXVRuFWKgMYgHaLH?rs=1&pid=ImgDetMain&cb=idpwebp2&o=7&rm=3",
-      time: "5h",
-      likes: "60,000",
-      caption: `"This means everything. My entire life I wanted to be an actor..."`,
-      commentCount: "1,652"
-    },
-    {
-      id: 2,
-      user: "Sigma Boss",
-      avatar: "https://i1.sndcdn.com/artworks-iNZ7PnppFNtWQrPl-6Uy9jw-t500x500.jpg",
-      image: "https://th.bing.com/th/id/OIP.BOvewLhwVkCXVRuFWKgMYgHaLH?rs=1&pid=ImgDetMain&cb=idpwebp2&o=7&rm=3",
-      time: "2h",
-      likes: "41,900",
-      caption: `"Never chase. Just attract. What belongs will simply find you."`,
-      commentCount: "783"
-    }
-  ];
+  const {posts} = useSelector(store => store.post);
   let isDown = false
   let startX
   let scrollLeft
@@ -80,8 +59,8 @@ const CenterSide = () => {
       </div>
       {/* Post section */}
       <div className="flex flex-col items-center gap-[20px] mt-[50px] pl-[65px]">
-        {postData.map((post) => (
-          <PostCard key={post.id} data={post} />
+        {posts?.map((post) => (
+          <PostCard key={post._id} postId={post._id} />
         ))}
       </div>
     </div>

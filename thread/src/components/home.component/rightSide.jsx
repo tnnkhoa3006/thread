@@ -2,13 +2,21 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setAuthUser } from '../../redux/authSlice.js';
+import { setPosts } from '../../redux/postSlice.js';
 
 const RightSide = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {user} = useSelector(store => store.auth);
   const logoutHandler = async () => {
     try {
       const res = await axios.get('/user/logout', {withCredentials: true});
       if (res.data.success) {
+        dispatch(setAuthUser(null));
+        dispatch(setPosts([]));
         navigate('/login');
         toast.success(res.data.message);
       }
@@ -24,11 +32,11 @@ const RightSide = () => {
         <div className="flex w-full pl-[15px]">
           <img
             className="w-[50px] h-[50px] object-cover rounded-full border-[3px] border-r-pink-500 border-b-purple-400 border-l-yellow-400 border-t-orange-400" 
-            src="https://i1.sndcdn.com/artworks-iNZ7PnppFNtWQrPl-6Uy9jw-t500x500.jpg" 
+            src={user?.ProfilePicture}
             alt="" 
           />
           <div className="flex w-[200px] flex-col justify-center pl-[10px]">
-            <span className="text-white text-[13px] font-semibold">Gigachad</span>
+            <span className="text-white text-[13px] font-semibold">{user?.username}</span>
             <span className="text-gray-400 text-[12px]"> @realChad🗿</span>
           </div>
           <div className='flex items-center justify-center'>

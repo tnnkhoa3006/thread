@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import getDataUri from "../utils/dataUri.js";
 import cloudinary from "../config/cloudinary.js";
+import Post from "../models/post.model.js";
+
 
 dotenv.config();
 
